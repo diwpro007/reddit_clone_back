@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-
 import java.time.Instant;
 
 import static javax.persistence.GenerationType.IDENTITY;
