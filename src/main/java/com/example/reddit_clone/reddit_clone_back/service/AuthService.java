@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -57,5 +58,29 @@ public class AuthService {
 
         verificationTokenRepository.save(verificationToken);
         return token;
+    }
+
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken =  verificationTokenRepository.findByToken(token);
+        try {
+            verificationToken.orElseThrow(() -> new SpringRedditException("Invalid Token"));
+        } catch (SpringRedditException e) {
+            e.printStackTrace();
+        }
+        fetchUserAndEnable(verificationToken.get());
+
+    }
+
+    @Transactional
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        String userName = verificationToken.getUser().getUsername();
+        User user = new User();
+        try {
+            user = userRepository.findByUsername(userName).orElseThrow(()->new SpringRedditException("User not found - " + userName));
+        } catch (SpringRedditException e) {
+            e.printStackTrace();
+        }
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }
