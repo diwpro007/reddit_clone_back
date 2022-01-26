@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubReddit {
+public class Subreddit {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
